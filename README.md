@@ -1,18 +1,18 @@
+##MFA System
 # files
 
 #root dir
 - app.py => main file and blueprint  registration
-#Auth dir
+    #Auth dir
+        -__init__ => blueprint declaration 
+        - models 
+        - login and sign up => Authentification Routes 
+        - Security => functions (totp gen verify , email ..)
+        - MFA => Routes for Security
 
--__init__ => blueprint declaration 
-- models 
-- login and sign up => Authentification Routes 
-- Security => functions (totp gen verify , email ..)
-- MFA => Routes for Security
-
-#templates
--html files all you need to know 
-##Authentification 
+    #Templates
+    - html files all you need to know 
+##Main App 
 #(1 = finished , 0 = unfinished )
 #Done : 
 - Authentification
