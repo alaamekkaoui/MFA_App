@@ -1,25 +1,34 @@
 # MFA app
 
-#Files
-#root dir
+# Files
+# root dir
 - app.py => main file and blueprint  registration
-    #Auth dir
+    # Auth dir
         -__init__ => blueprint declaration 
         - models 
         - login and sign up => Authentification Routes 
         - Security => functions (totp gen verify , email ..)
         - MFA => Routes for Security
 
-    #Templates
+    # Templates
     - html files all you need to know 
 __________________________________________________________________________________
-##Main App 
-#(1 = finished , 0 = unfinished )
-#Done : 
+## Main App 
+# Technology currently working with :
+Web app  => python + flask 
+Database => MongoDB
+TOTP => pyotp  
+SSO technology => Keycloak => Open Source Solution 
+(1 = finished , 0 = unfinished )
 - Authentification
-    - Login and passowrd (Login and signup files) 
-    - retrieve data from the database 
+
+    - Login and passowrd (Login and signup files)  1
+    - Database Connection  1 
 - Security : 
-    - Qr code gen for each user , name of the app and there user name 
-#undone 
-- verify the qr code  
+    - TOTP token generation for each user , URI -> Name of app + name of the user 1 
+    - Email  0 
+    - Enhanced Features for authentificatiom : 
+        -  Emails 
+        -  hardware  
+        -  notification push approvale
+        -  Social Login 
