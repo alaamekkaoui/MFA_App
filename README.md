@@ -1,6 +1,6 @@
-##MFA System
-# files
+# MFA app
 
+#Files
 #root dir
 - app.py => main file and blueprint  registration
     #Auth dir
@@ -12,6 +12,7 @@
 
     #Templates
     - html files all you need to know 
+__________________________________________________________________________________
 ##Main App 
 #(1 = finished , 0 = unfinished )
 #Done : 
