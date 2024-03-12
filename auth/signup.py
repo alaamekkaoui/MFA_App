@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, redirect, request, render_template, url_for
 from werkzeug.security import generate_password_hash
 from auth.models import User
 from auth.mongodb import connect_to_mongodb  # Import the MongoDB connection function
@@ -30,7 +30,8 @@ def signup():
         # Create user
         user_instance.create_user(username, email, password)
 
-        return jsonify({'message': 'User registered successfully'}), 201
+        #return jsonify({'message': 'User registered successfully'}), 201
+        return redirect(url_for('qr_bp.generate_1fa_qr', username=username))
     else:
         # If the request method is GET, render the signup form
         return render_template('signup.html')

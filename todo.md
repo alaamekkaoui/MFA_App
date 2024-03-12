@@ -1,24 +1,14 @@
-## files
+authentification 
+    database done 
+    qr code : 
+        change qr code to show on signup page and in login only have the input of the code 
+    email : 
+    simple code to send otp and verify 
 
-#root dir
-- app.py => main file and blueprint  registration
-#Auth dir
+    push notification approval :  
+        need to do some research
+SSO : 
+keycloak or oauth2 ? 
 
--__init__ => blueprint declaration 
-- models 
-- login and sign up => Authentification Routes 
-- Security => functions (totp gen verify , email ..)
-- MFA => Routes for Security
+hardware login ? maybe not sure 
 
-#templates
--html files all you need to know 
-##Authentification 
-#(1 = finished , 0 = unfinished )
-#Done : 
-- Authentification
-    - Login and passowrd (Login and signup files) 
-    - retrieve data from the database 
-- Security : 
-    - Qr code gen for each user , name of the app and there user name 
-#undone 
-- verify the qr code  

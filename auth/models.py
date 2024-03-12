@@ -1,5 +1,5 @@
+from flask import redirect, url_for
 from pymongo import MongoClient
-import pyotp
 import bcrypt
 from auth.security import generate_totp_uri
 
@@ -45,4 +45,10 @@ class User:
 
     def set_totp_verification(self, username, is_verified):
         self.collection.update_one({'username': username}, {'$set': {'is_otp_verified': is_verified}})
-
+    
+    def get_all_users(self):
+        return list(self.collection.find({}))
+    
+    def delete_user(self, username):
+        self.collection.delete_one({'username': username})
+    

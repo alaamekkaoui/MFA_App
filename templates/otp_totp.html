@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .form-container {
+            margin: 50px auto;
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 { 
+            text-align: center;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="submit"] {
+            width: 100%; 
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+            background-color: #fff;
+            color: #333;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        .resend-link {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666; /* Slightly muted color for resend link */
+        }
+
+        .resend-link a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .resend-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container"> 
+        <h2>OTP Verification</h2>
+        <p>User: {{ username }}</p>
+        <p>Email: {{ email }}</p>
+        <form action="/otp_verify/{{ username }}" method="post">
+            <p>Enter the OTP code sent to your email.</p> 
+            <input type="text" name="code" placeholder="Enter OTP code" required>
+            <input type="submit" value="Verify OTP">
+            <span class="resend-link">Something Happen to your OTP code , Change it <a href="OTP">Resend OTP</a></span> 
+        </form>
+    </div>
+</body>
+</html>
