@@ -2,8 +2,7 @@ from pymongo import MongoClient
 
 def connect_to_mongodb():
     MONGO_URI = 'mongodb+srv://demon123:demon123@auth.iqsr3fq.mongodb.net/?retryWrites=true&w=majority'
-    DB_NAME = 'Auth_DB'  # Replace 'Auth_DB' with your database name
-
+    DB_NAME = 'Auth_DB'
     try:
         # Attempt MongoDB connection
         client = MongoClient(MONGO_URI)

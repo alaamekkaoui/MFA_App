@@ -70,11 +70,12 @@
         <p>User: {{ username }}</p>
         <p>Email: {{ email }}</p>
         <form action="/otp_verify/{{ username }}" method="post">
-            <p>Enter the OTP code sent to your email.</p> 
+            <p>Enter the OTP code.</p> 
             <input type="text" name="code" placeholder="Enter OTP code" required>
             <input type="submit" value="Verify OTP">
-            <span class="resend-link">Something Happen to your OTP code , Change it <a href="OTP">Resend OTP</a></span> 
+            <span class="resend-link">Something Happened to your OTP code? <a href="/qrcode/{{ username }}">Resend OTP</a></span> 
         </form>
+        
     </div>
 </body>
 </html>

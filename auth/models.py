@@ -36,7 +36,10 @@ class User:
     
     def get_user_by_username(self, username):
         return self.collection.find_one({'username': username})
-
+    
+    def get_email_by_username(self, username):
+        return self.collection.find_one({'username': username}, {'email': 1})
+    
     def get_user_by_email(self, email):
         return self.collection.find_one({'email': email})
 

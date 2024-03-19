@@ -1,6 +1,40 @@
 import pyotp
 import qrcode
+from auth.email import send_email_otp
+from functools import wraps
+from flask import current_app, request, jsonify, session
+import jwt
+from datetime import datetime, timedelta
 
+EMAIL_EXPIRATION_WINDOW = 10 * 60  # 10 minutes in seconds
+#-------------------------------------JWT--------------------------------------
+def token_required(route_function):
+    @wraps(route_function)
+    def wrapper(*args, **kwargs):
+        # Get JWT token from session
+        token = session.get('jwt_token')
+        username = session.get('username')
+        if not token:
+            return jsonify({'message': 'Missing JWT token'}), 401
+
+        # Verify JWT token
+        try:
+            payload = jwt.decode(token, 'SECRET_KEY', algorithms=['HS256'])
+            identity = payload.get('identity')
+            exp = payload.get('exp')
+
+            if exp and datetime.utcfromtimestamp(exp) < datetime.utcnow():
+                return jsonify({'message': 'JWT token has expired'}), 401
+            
+            return route_function(*args, **kwargs)
+
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'JWT token has expired'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'message': 'Invalid JWT token'}), 401
+
+    return wrapper
+#-------------------------------------TOTP--------------------------------------
 # Generate TOTP URI
 def generate_totp_uri(username):
     secret = pyotp.random_base32()
@@ -21,6 +55,16 @@ def verify_totp(secret, code):
     totp = pyotp.TOTP(secret)
     return totp.verify(code)
 
-#emall verification
-def verify_email(email, code):
-    pass
+#-------------------------------------Email--------------------------------------
+def generate_totp_email(email):
+    secret = pyotp.random_base32()
+    totp = pyotp.TOTP(secret)
+    code = totp.now()
+    return code
+
+def send_email(email, code):
+    if email : 
+        send_email_otp(email, code)
+    else : 
+        return "Email not found"
+
