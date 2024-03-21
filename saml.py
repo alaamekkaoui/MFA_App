@@ -1,8 +1,10 @@
-from flask import Flask, redirect, request, session, url_for, render_template_string
+from flask import Flask, Response, redirect, request, session, url_for, render_template_string
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from saml2 import BINDING_HTTP_POST
 from saml2.client import Saml2Client
 from saml2.config import Config as Saml2Config
+import base64
+from auth.models import User
 
 app = Flask(__name__)
 app.secret_key = 'your_super_secret_key'
@@ -13,15 +15,6 @@ login_manager.init_app(app)
 # Assuming the Okta metadata file is named 'okta_metadata.xml' and placed in the same directory as this script.
 metadata_path = './metadata.xml'
 idp_name = 'okta'
-
-# Flask-Login user model
-class User(UserMixin):
-    def __init__(self, username):
-        self.id = username
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
 
 def saml_client_for():
     acs_url = url_for("idp_initiated", _external=True)
@@ -64,15 +57,38 @@ def main_page():
         {% endif %}
     ''')
 
+# @app.route("/saml/sso/okta", methods=['POST'])
+# def idp_initiated():
+#     saml_client = saml_client_for()
+#     authn_response = saml_client.parse_authn_request_response(
+#         request.form['SAMLResponse'],BINDING_HTTP_POST)
+#     username = authn_response.get_subject().text
+#     user = User(username)
+#     login_user(user)
+#     return redirect(url_for('main_page'))
 @app.route("/saml/sso/okta", methods=['POST'])
 def idp_initiated():
+    # Directly capture and decode the SAML Response from the form data
+    saml_response_encoded = request.form.get('SAMLResponse')
+    saml_response_decoded = base64.b64decode(saml_response_encoded).decode('utf-8')
+
+    # Proceed with parsing the SAML response and user login for demonstration
     saml_client = saml_client_for()
     authn_response = saml_client.parse_authn_request_response(
-        request.form['SAMLResponse'],BINDING_HTTP_POST)
+        saml_response_encoded,  # Use the encoded response here
+        BINDING_HTTP_POST)
+    
+    # Extract username and other operations as before
     username = authn_response.get_subject().text
     user = User(username)
     login_user(user)
-    return redirect(url_for('main_page'))
+
+    # For debugging: Return the decoded SAML Response instead of redirecting
+    # IMPORTANT: Only for debugging/testing. Remove or secure this for production use.
+    return Response(saml_response_decoded, mimetype='application/xml')
+
+    # The original redirect can be reinstated after testing
+    # return redirect(url_for('main_page'))
 
 @app.route("/saml/login/okta")
 def sp_initiated():
@@ -88,6 +104,8 @@ def sp_initiated():
 def logout():
     logout_user()
     return redirect(url_for('main_page'))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

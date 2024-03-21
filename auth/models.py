@@ -2,12 +2,14 @@ from flask import redirect, url_for
 from pymongo import MongoClient
 import bcrypt
 from auth.security import generate_totp_uri
+from flask_login import UserMixin
 
-class User:
+class User(UserMixin):
     def __init__(self, client, db, users_collection):
             self.client = client
             self.db = db
-            self.collection = users_collection  
+            self.collection = users_collection
+            #self.is_active = True
 
     def create_user(self, username, email, password):
         otp_uri = generate_totp_uri(username)
@@ -26,7 +28,26 @@ class User:
         print("Email:", email)
         print("OTP URI:", otp_uri)
         print("-----------------------------------------------")
-    
+
+    def create_user_sso(self , username , email): 
+        otp_uri = generate_totp_uri(username)
+        
+        user_data = {
+            'username': username,
+            'email': email,
+            'otp_uri': otp_uri,
+            'is_otp_verified': False
+        }
+        self.collection.insert_one(user_data)
+
+        print("-----------------------------------------------")
+        print("User created successfully for SAML:")
+        print("Username:", username)
+        print("Email:", email)
+        print("OTP URI:", otp_uri)
+        print(user_data)
+        print("-----------------------------------------------")
+
     def verify_password(self, username, password):
         user = self.collection.find_one({'username': username})
         if user:

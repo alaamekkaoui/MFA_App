@@ -16,7 +16,6 @@ def token_required(route_function):
         username = session.get('username')
         if not token:
             return jsonify({'message': 'Missing JWT token'}), 401
-
         # Verify JWT token
         try:
             payload = jwt.decode(token, 'SECRET_KEY', algorithms=['HS256'])

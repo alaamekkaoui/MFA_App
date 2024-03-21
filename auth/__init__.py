@@ -8,14 +8,14 @@ qr_bp = Blueprint('qr', __name__)
 
 # Import modules
 from auth.models import User
-from auth.login import login, logout, protected_route
+from auth.login import login, logout, protected
 from auth.signup import signup
 from auth.security import generate_qr_code, verify_totp
 
 # Register routes with Blueprints
 
 login_bp.add_url_rule('/login', 'login', login)
-login_bp.add_url_rule('/protected', 'protected', protected_route)
+login_bp.add_url_rule('/protected', 'protected', protected)
 login_bp.add_url_rule('/logout', 'logout', logout)
 signup_bp.add_url_rule('/signup', 'signup', signup)
 qr_bp.add_url_rule('/qrcode/<username>', ' generate_qr_code',  generate_qr_code )

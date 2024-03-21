@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saml Login</title>
+</head>
+<body>
+    <h1>Connected using SAML</h1>
+     <p>Logged in as {{ email }}</p>
+    <p><a href="{{ url_for('login.logout') }}">Logout</a></p>
+</body>
+</html>
