@@ -1,7 +1,7 @@
 from flask import redirect, url_for
 from pymongo import MongoClient
 import bcrypt
-from auth.security import generate_totp_uri
+from auth.Security.security import generate_totp_uri
 from flask_login import UserMixin
 
 class User(UserMixin):
@@ -9,7 +9,6 @@ class User(UserMixin):
             self.client = client
             self.db = db
             self.collection = users_collection
-            #self.is_active = True
 
     def create_user(self, username, email, password):
         otp_uri = generate_totp_uri(username)
@@ -75,4 +74,5 @@ class User(UserMixin):
     
     def delete_user(self, username):
         self.collection.delete_one({'username': username})
+    
     

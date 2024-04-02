@@ -5,58 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Display</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        body, html {
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
+            height: 100%; /* Prevent scrolling */
+            overflow: hidden; /* Prevent scrolling */
+        }
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+        .navbar a, .navbar span {
+            color: #fff;
+            text-decoration: none;
+            padding: 0 10px;
         }
         .container {
             max-width: 600px;
-            margin: 50px auto;
+            margin: 50px auto 0 auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: auto; /* Allow internal scrolling if necessary */
         }
         h1 {
             text-align: center;
             color: #333;
         }
-        .qr-code {
-            text-align: center;
-            margin-top: 20px;
-        }
         .qr-code img {
-            max-width: 100%;
+            width: 40%; /* Smaller QR code */
             height: auto;
             display: block;
             margin: 0 auto;
         }
-        .user-info {
+        .user-info, .save-qr {
             text-align: center;
             margin-top: 20px;
             font-size: 18px;
             color: #555;
         }
-        .save-qr {
-            text-align: center;
-            margin-top: 20px;
+        input[type="text"], input[type="submit"] {
+            width: 60%; /* Adjusted width */
+            padding: 12px; /* Increased padding */
+            margin-bottom: 15px;
+            border: none; /* No border */
+            border-radius: 10px; /* More rounded corners */
+            box-sizing: border-box;
+            background-color: #e7e7e7; /* Lighter background */
+            color: #333;
         }
-        .save-qr input[type="text"],
-        .save-qr input[type="checkbox"] {
-            margin-bottom: 10px;
-        }
-        .save-qr input[type="submit"] {
-            background-color: #333;
+        input[type="submit"] {
+            background-color: #000000; /* Brighter color */
             color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition */
         }
-        .save-qr input[type="submit"]:hover {
-            background-color: #555;
+        input[type="submit"]:hover {
+            background-color: #64676b; /* Darker on hover */
         }
     </style>
 </head>
@@ -65,17 +76,14 @@
         <h1>QR Code Display</h1>
         <div class="user-info">
             <p>Username: {{ username }}</p>
-            <p>Secret Code: {{ secret }}</p>
         </div>
         <div class="qr-code">
             <img src="{{ qr_image }}" alt="QR Code">
         </div>
         <div class="save-qr">
             <form action="/otp_verify/{{ username }}" method="post">
-                <input type="text" name="code" placeholder="Enter OTP code" 
-                style="width: 50%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 3px; box-sizing: border-box; background-color: #fff; color: #333;">
-                <br>
-                <input type="submit" value="Verify OTP" style="background-color: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                <input type="text" name="code" placeholder="Enter OTP code">
+                <input type="submit" value="Verify OTP">
             </form>
         </div>
     </div>

@@ -2,61 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta viewport="width=device-width, initial-scale=1.0">
     <title>Email OTP Verification</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            width: 350px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         h1, h2 {
-            text-align: center;
+            font-size: 18px; /* Reduced size for a cleaner look */
             color: #333;
+            margin: 10px 0; /* Reduced margin */
         }
 
-        form {
-            margin: 50px auto;
-            width: 300px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        input[type="text"],
-        input[type="submit"] {
-            width: 100%; 
-            padding: 10px;
+        input[type="text"], button[type="submit"] {
+            width: calc(100% - 20px); /* Adjust width to fit card padding */
+            padding: 12px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 20px; /* More rounded corners */
             box-sizing: border-box;
-            background-color: #fff;
+            background-color: #f9f9f9; /* Lighter background for input */
             color: #333;
+            outline: none; /* Remove focus outline */
         }
 
-        input[type="submit"] {
-            background-color: #333;
+        button[type="submit"] {
+            background-color: #000000; /* Modern, vibrant button color */
             color: #fff;
+            border: none;
             cursor: pointer;
+            transition: background-color 0.2s; /* Smooth transition for hover effect */
         }
 
-        input[type="submit"]:hover {
-            background-color: #555;
+        button[type="submit"]:hover {
+            background-color: #434343; /* Slightly darker on hover */
         }
     </style>
 </head>
 <body>
-    <h1>Enter OTP Received in Your Email : {{ email }}</h1>
-    <h2>For the user : {{ username }}</h2>
-    <form method="POST" action="{{ url_for('qr_bp.email_verify', username=username) }}"> 
-        <input type="text" name="code" placeholder="Enter OTP" required>
-        <input type="hidden" name="email" value="{{ email }}">
-        <input type="hidden" name="username" value="{{ username }}"> 
-        <button type="submit">Verify</button>
-    </form>
+    <div class="card">
+        <h1>Enter OTP Received in Your Email</h1>
+        <h2>Username: {{ username }}</h2>
+        <form method="POST" action="{{ url_for('qr_bp.email_verify', username=username) }}">
+            <input type="text" name="code" placeholder="Enter OTP" required>
+            <input type="hidden" name="email" value="{{ email }}">
+            <input type="hidden" name="username" value="{{ username }}">
+            <input type="hidden" name="secret" value="{{ secret }}">
+            <button type="submit">Verify</button>
+        </form>
+    </div>
 </body>
 </html>

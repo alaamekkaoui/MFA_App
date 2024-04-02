@@ -1,0 +1,19 @@
+first user logged in 
+    either sso , database , social login 
+2nd 
+    security mfa stuff 
+3rd 
+    after user is logged  ,token is generated 
+    need to be shared with the other sp to logged in 
+
+session or jwt will be shared 
+
+login and mfa are in localhost5000
+sp will be sign in using session 
+any authentification related will be in localhost5000
+
+
+5000 the main app where all functions happen 
+    user auth , choose sp , 
+other ports : 
+    auto login with user and password no need for MFA directly logged in 

@@ -1,16 +1,18 @@
 from flask import Blueprint
-from auth.email import send_email_otp
+from auth.Security.email import send_email_otp
+from auth.middlewears.session_manager import session_check
 
 # Define Blueprints
 login_bp = Blueprint('login', __name__)
 signup_bp = Blueprint('signup', __name__)
 qr_bp = Blueprint('qr', __name__)
+session_bp = Blueprint('session', __name__)
 
 # Import modules
 from auth.models import User
-from auth.login import login, logout, protected
-from auth.signup import signup
-from auth.security import generate_qr_code, verify_totp
+from auth.Form.login import login, logout, protected
+from auth.Form.signup import signup
+from auth.Security.security import generate_qr_code, verify_totp
 
 # Register routes with Blueprints
 
@@ -22,5 +24,6 @@ qr_bp.add_url_rule('/qrcode/<username>', ' generate_qr_code',  generate_qr_code 
 qr_bp.add_url_rule('/otp_verify', 'otp_verify',  verify_totp )
 qr_bp.add_url_rule('/email_otp', 'send_email_otp',  send_email_otp )
 qr_bp.add_url_rule('/email_verify', 'email_verify',  verify_totp )
+session_bp.add_url_rule('/session_check', 'session_check', session_check)
 
 

@@ -93,9 +93,28 @@
         <h1>User Management</h1>
         {% if username %}
             <h2>Welcome, {{ username }}</h2>
-            <h4>Session : {{ login_method }}</h4>
+            <h4>Session: {{ login_method }}</h4>
+            <div>
+                <h3>Choose a Service Provider to log into:</h3>
+                <table>
+                    <tr>
+                        <th>Service Provider</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td>SP1</td>
+                        <td><a href="http://localhost:5001">Log into SP1</a></td>
+                    </tr>
+                    <tr>
+                        <td>SP2</td>
+                        <td><a href="http://localhost:5002/">Log into SP2</a></td>
+                    </tr>
+                </table>
+            </div>
         {% endif %}
+        
         <table>
+            
             <thead>
                 <tr>
                     <th>Username</th>
@@ -121,5 +140,6 @@
         </table>
     </div>
 </body>
+
 
 </html>
