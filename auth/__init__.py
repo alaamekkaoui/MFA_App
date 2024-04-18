@@ -1,4 +1,5 @@
 from flask import Blueprint
+#from auth.Security.MFA import approve_route, deny_route
 from auth.Security.email import send_email_otp
 from auth.middlewears.session_manager import session_check
 
@@ -24,6 +25,8 @@ qr_bp.add_url_rule('/qrcode/<username>', ' generate_qr_code',  generate_qr_code 
 qr_bp.add_url_rule('/otp_verify', 'otp_verify',  verify_totp )
 qr_bp.add_url_rule('/email_otp', 'send_email_otp',  send_email_otp )
 qr_bp.add_url_rule('/email_verify', 'email_verify',  verify_totp )
+# qr_bp.add_url_rule('/approve', 'approve_route',  approve_route )
+# qr_bp.add_url_rule('/deny', 'deny_route',  deny_route )
 session_bp.add_url_rule('/session_check', 'session_check', session_check)
 
 

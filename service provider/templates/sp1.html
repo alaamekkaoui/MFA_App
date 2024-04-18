@@ -3,13 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login with SAML</title>
+    <title>Scan Results</title>
 </head>
 <body>
-    <h2>Login with SAML</h2>
-    <!-- Simple button for SAML login -->
-    <form action="/saml" method="GET">
-        <button type="submit">Login with SAML SSO</button>
-    </form>
+    <h1>Scan Results</h1>
+    <p>Welcome, {{ session_email }}</p>
+
+    <h2>Open Ports:</h2>
+    <ul>
+        {% for device in open_ports %}
+        <li>
+            <p>Device IP: {{ device.ip }}</p>
+            <ul>
+                {% for port, protocol in device.ports %}
+                <li>Port: {{ port }} ({{ protocol }})</li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Vulnerabilities:</h2>
+    <ul>
+        {% for vulnerability in vulnerabilities %}
+        <li>{{ vulnerability }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

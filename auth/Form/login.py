@@ -4,6 +4,7 @@ from saml2 import BINDING_HTTP_POST, BINDING_HTTP_REDIRECT
 from saml2.client import Saml2Client
 from saml2.config import Config as Saml2Config
 import base64
+import os
 from datetime import timedelta
 from io import BytesIO
 from auth.Security.email import send_approval_email
@@ -14,7 +15,9 @@ from flask_jwt_extended import create_access_token, unset_jwt_cookies
 
 login_bp = Blueprint('login', __name__)
 
-metadata_path = './metadata.xml'
+current_dir = os.path.abspath(os.getcwd())
+metadata_path = os.path.join(current_dir, 'metadata.xml')
+
 idp_name = 'okta'
 
 client, db, users_collection = connect_to_mongodb()

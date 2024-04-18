@@ -17,3 +17,6 @@ any authentification related will be in localhost5000
     user auth , choose sp , 
 other ports : 
     auto login with user and password no need for MFA directly logged in 
+
+
+sp1 : port scanner , maybe add others functions

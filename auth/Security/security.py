@@ -5,8 +5,6 @@ from functools import wraps
 from flask import jsonify, session
 import jwt
 from datetime import datetime
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-s = URLSafeTimedSerializer("secret_key")
 
 
 EMAIL_EXPIRATION_WINDOW = 10 * 60  # 10 minutes in seconds
@@ -73,24 +71,5 @@ def send_email(email, code):
         send_email_otp(email, code)
     else:
         return "Email not found"
-
-#-------------------------------------Approve--------------------------------------
-def generate_approval_token(email):
-    return s.dumps(email, salt='email-approve')
-
-def approve(token):
-    try:
-        email = s.loads(token, salt='email-approve', max_age=3600)
-        return "Approval confirmed."
-    except SignatureExpired:
-        # Handle the case where the token has expired
-        return "The approval link has expired."
-def deny(token):
-    try:
-        email = s.loads(token, salt='email-approve', max_age=3600) 
-        return "Request denied."
-    except SignatureExpired:
-        # Address the scenario where the token expires
-        return "The denial link has expired."
 
 

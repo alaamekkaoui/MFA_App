@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify, redirect, request, render_template, url_for
+from datetime import timedelta
+from flask import Blueprint, jsonify, redirect, request, render_template, session, url_for
+from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash
 from auth.models import User
 from auth.mongodb import connect_to_mongodb  # Import the MongoDB connection function
@@ -29,6 +31,10 @@ def signup():
 
         # Create user
         user_instance.create_user(username, email, password)
+        expiration_time = timedelta(hours=1)
+        access_token = create_access_token(identity=username, expires_delta=expiration_time)
+
+        session['jwt_token'] = access_token
 
         #return jsonify({'message': 'User registered successfully'}), 201
         return redirect(url_for('qr_bp.generate_1fa_qr', username=username))
