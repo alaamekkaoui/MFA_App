@@ -68,6 +68,11 @@ def idp_initiated():
 
     if not user_model.get_user_by_username(email):
         user = user_model.create_user_sso(username=email, email=email)
+        expiration_time = timedelta(hours=1)
+        access_token = create_access_token(identity=email, expires_delta=expiration_time)
+        session['username'] = email
+        session['jwt_token'] = access_token
+        session['login_method'] = 'sso'
         print("User created successfully for SAML:", user)
     else:
         print("User already exists for SAML:", email)

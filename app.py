@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session
+from flask import Flask, jsonify, render_template, request, session
 from auth.Form.login import login_bp
 from auth.mongodb import connect_to_mongodb
 from auth.Form.signup import signup_bp
@@ -9,7 +9,6 @@ from flask_jwt_extended import JWTManager
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 app = Flask(__name__)
-#app.config['SERVER_NAME'] = 'secureapp'
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 jwt = JWTManager(app)
 s = URLSafeTimedSerializer(app.secret_key)
@@ -41,6 +40,26 @@ def index():
     else:
         # Handle case where no user identity is found in session
         return render_template('index.html', users=users, username=None, login_method=None, jwt_token=None)
-    
+
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    if 'username' in session:
+        username = session['username']
+        delete_username = request.form.get('username')
+        
+        user_model = User(client, db, users_collection)
+        user = users_collection.find_one({'username': delete_username})
+        if user:
+                result = users_collection.delete_one({'username': delete_username})
+                if result.deleted_count == 1:
+                    return jsonify({'message': 'User deleted successfully'}), 200
+                else:
+                    return jsonify({'error': 'Failed to delete user'}), 500
+        else:
+                return jsonify({'error': 'User not found'}), 404
+    else:
+        return jsonify({'error': 'User not logged in'}), 401
+
+
 if __name__ == '__main__':
     app.run(debug=True,port = 5000)
