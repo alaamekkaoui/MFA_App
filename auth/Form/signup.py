@@ -40,4 +40,4 @@ def signup():
         return redirect(url_for('qr_bp.generate_1fa_qr', username=username))
     else:
         # If the request method is GET, render the signup form
-        return render_template('signup.html')
+        return render_template('login1.html')

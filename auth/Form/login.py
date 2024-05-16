@@ -166,7 +166,7 @@ def login():
             return render_template('qr_display.html', username=user.get('username'), email=user.get('email'), qr_image=qr_image, secret=secret, response_data=response_data)
 
     else:
-        return render_template('login.html')
+        return render_template('login1.html')
 
 
 @login_bp.route('/protected')

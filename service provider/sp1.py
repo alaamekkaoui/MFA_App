@@ -1,25 +1,19 @@
+# Run as administrator
 import os
-from flask import Flask, render_template, request, jsonify, redirect, session, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from saml2 import BINDING_HTTP_POST
 from saml2.client import Saml2Client
 from saml2.config import Config as Saml2Config
-from flask_jwt_extended import create_access_token, JWTManager
 import nmap
 import base64
 
 app = Flask(__name__)
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key_here'  # Change to your JWT secret key
 app.config['SECRET_KEY'] = 'your_flask_secret_key_here'  # Flask secret for session, etc.
-jwt = JWTManager(app)
-
 
 current_dir = os.path.abspath(os.getcwd())
 metadata_path = os.path.join(current_dir, 'metadata_sp.xml')
 
 idp_name = 'okta'
-
-# Update the session secret key
-app.secret_key = os.urandom(24)
 
 def saml_client_for():
     acs_url = url_for("idp_initiated", _external=True)
@@ -54,13 +48,15 @@ def saml_client_for():
     return saml_client
 
 def scan_network(ip_range):
+    print("Initiating network scan...")
     nm = nmap.PortScanner()
     open_ports = set()  # Set to store unique open ports
     vulnerabilities = set()  # Set to store vulnerabilities
-
-    # Scan for both TCP and UDP ports with faster options
     
     nm.scan(hosts=ip_range, arguments='-p 1-10000 --verbose -sS -sU -T3 --script vulners')
+    
+    print("Scan completed.")
+
     for host in nm.all_hosts():
         if 'tcp' in nm[host]:
             for port in nm[host]['tcp'].keys():
@@ -79,7 +75,8 @@ def scan_network(ip_range):
 @app.route('/')
 def home():
     if 'username' in session:
-        return redirect(url_for('scan'))
+        username = session.get('username', 'No email found')
+        return render_template('sp1.html', username=username)
     else:
         return redirect(url_for('login'))
 
@@ -92,22 +89,30 @@ def login():
             return redirect(value)
     return 'Failed to redirect for SAML authentication'
 
-@app.route('/scan')
+@app.route('/scan', methods=['GET', 'POST'])
 def scan():
-    # if 'username' not in session:
-    #     return redirect(url_for('login'))
+   if 'username' not in session:
+        return redirect(url_for('login'))
 
-    ip_range = request.remote_addr + '/24'  # Assuming you want to scan a range
-    open_ports, vulnerabilities = scan_network(ip_range)
+   if request.method == 'POST':
+        ip_range = request.remote_addr + '/24'  # Assuming you want to scan a range
+        open_ports, vulnerabilities = scan_network(ip_range)
 
+        session['scan_results'] = {'open_ports': open_ports, 'vulnerabilities': vulnerabilities}
+
+        return jsonify({'message': 'Scan completed'})
+
+@app.route('/scan_results')
+def scan_results():
+    if 'username' not in session or 'scan_results' not in session:
+        return redirect(url_for('login'))
+
+    scan_results = session.get('scan_results')
+    open_ports = scan_results.get('open_ports', [])
+    vulnerabilities = scan_results.get('vulnerabilities', [])
     session_email = session.get('username', 'No email found')
 
-    return render_template('sp1.html', open_ports=open_ports, vulnerabilities=vulnerabilities, session_email=session_email)
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
+    return render_template('scan_results.html', open_ports=open_ports, vulnerabilities=vulnerabilities, session_email=session_email)
 
 @app.route('/saml/sso/okta', methods=['POST', 'GET'])
 def idp_initiated():
@@ -122,8 +127,9 @@ def idp_initiated():
     email = authn_response.get_subject().text
 
     session['username'] = email
+    print(session['username'])
 
-    return redirect(url_for('scan'))
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 
 def connect_to_mongodb():
+    #modify link below with your credentiels
     MONGO_URI = 'mongodb+srv://demon123:demon123@auth.iqsr3fq.mongodb.net/?retryWrites=true&w=majority'
     DB_NAME = 'Auth_DB'
     try:

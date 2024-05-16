@@ -10,6 +10,7 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 s = URLSafeTimedSerializer("secret_key")
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+#modify email address with yours 
 EMAIL_ADDRESS = "otpcode288@gmail.com"
 
 current_dir = os.path.dirname(os.path.abspath(__file__))

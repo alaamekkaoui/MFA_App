@@ -3,113 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTP Verification</title>
+    <title>2FA Verification</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        body, html {
+            font-family: 'Jost', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .navbar {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
         }
-
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 15px;
-            transition: color 0.3s ease;
-        }
-
-        .navbar a:hover {
-            color: #ddd;
-        }
-
-        .form-container {
-            margin: 50px auto;
-            width: 300px;
+        .container {
+            max-width: 600px;
+            margin: 50px auto 0 auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px; /* Increased border radius */
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Added shadow */
+            overflow: auto; /* Allow internal scrolling if necessary */
+            position: relative; /* Added for positioning */
         }
-
-        h2 { 
+        .card {
+            background: #573b8a; 
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added shadow */
+        }
+        h1 {
             text-align: center;
-            color: #333;
+            color: #fff; /* White font color */
         }
-
-        input[type="text"],
-        input[type="submit"] {
-            width: 100%;
-            padding: 12px;
+        .qr-code img {
+            width: 100%; /* Adjusted width */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .user-info, .save-qr {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #fff; /* White font color */
+        }
+        input[type="text"], input[type="submit"] {
+            width: 60%; /* Adjusted width */
+            padding: 12px; /* Increased padding */
             margin-bottom: 15px;
-            border: none; /* Remove border */
-            border-radius: 5px; /* Rounded corners for input fields */
+            border: none; /* No border */
+            border-radius: 10px; /* More rounded corners */
             box-sizing: border-box;
-            background-color: #f9f9f9; /* Lighter background for inputs */
+            background-color: #e0dede; /* Lighter background */
             color: #333;
         }
-
         input[type="submit"] {
-            background-color: #0084ff; /* Brighter color for submit button */
+            background-color: #1f1b2bd2; /* Purple color */
             color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+            transition: background-color 0.3s; /* Smooth transition */
         }
-
         input[type="submit"]:hover {
-            background-color: #0056b3; /* Darker shade on hover */
-        }
-
-        .resend-link {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666; /* Slightly muted color for resend link */
-        }
-
-        .resend-link a {
-            color: #0084ff; /* Consistent color for links */
-            text-decoration: none;
-        }
-
-        .resend-link a:hover {
-            text-decoration: underline;
-        }
-
-        .user-email {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #333;
-            text-align: center;
+            background-color: #6d44b8; /* Darker purple on hover */
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div>Email: <span>{{ username }}</span></div>
-        <div>
-            <a href="/home">Home</a>
-            <a href="/logout">Logout</a>
+    <div class="container">
+        <h1>OTP Code</h1>
+        <div class="card">
+            <div class="qr-code">
+                <img src="{{ totp_image }}" alt="TOTP QR Code">
+            </div>
+            <div class="user-info">
+                <p>Username: {{ username }}</p>
+            </div>
+            <div class="save-qr">
+                <form action="/verify_totp/{{ username }}" method="post">
+                    <input type="text" name="code" placeholder="Enter TOTP code">
+                    <input type="submit" value="Verify TOTP">
+                </form>
+            </div>
         </div>
-    </nav>
-
-    <div class="form-container"> 
-        <h2>OTP Verification</h2>
-        <p>User: {{ username }}</p>
-        <form action="/otp_verify/{{ username }}" method="post">
-            <p>Enter the OTP code.</p> 
-            <input type="text" name="code" placeholder="Enter OTP code" required>
-            <input type="submit" value="Verify OTP">
-            <span class="resend-link">Something Happened to your OTP code? <a href="/qrcode/{{ username }}">Resend OTP</a></span> 
-        </form>
     </div>
 </body>
 </html>

@@ -3,31 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scan Results</title>
+    <title>Home</title>
+    <script>
+        function initiateScan() {
+            document.getElementById("scanStatus").innerText = "Scanning..."; 
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/scan", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.getElementById("scanStatus").innerText = "Scan complete!";
+                    window.location.href = "/scan_results"; // Redirect to the scan results page
+                }
+            };
+            xhr.send();
+        }
+    </script>
 </head>
 <body>
-    <h1>Scan Results</h1>
-    <p>Welcome, {{ session_email }}</p>
-
-    <h2>Open Ports:</h2>
-    <ul>
-        {% for device in open_ports %}
-        <li>
-            <p>Device IP: {{ device.ip }}</p>
-            <ul>
-                {% for port, protocol in device.ports %}
-                <li>Port: {{ port }} ({{ protocol }})</li>
-                {% endfor %}
-            </ul>
-        </li>
-        {% endfor %}
-    </ul>
-
-    <h2>Vulnerabilities:</h2>
-    <ul>
-        {% for vulnerability in vulnerabilities %}
-        <li>{{ vulnerability }}</li>
-        {% endfor %}
-    </ul>
+    <h1>Welcome, {{ username }}</h1>
+    <p id="scanStatus"></p> <!-- Display scan status here -->
+    <button onclick="initiateScan()">Scan Network</button>
 </body>
 </html>
