@@ -31,12 +31,14 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1' # specify the ruby version you need
+          ruby-version: '3.1'
 
-      - name: Add faraday-retry gem
+      - name: Add faraday-retry gem to Gemfile
         run: |
           echo "gem 'faraday-retry'" >> Gemfile
-          bundle install
+
+      - name: Install dependencies
+        run: bundle install
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
