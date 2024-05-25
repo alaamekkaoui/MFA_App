@@ -31,11 +31,12 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: '3.1' # specify the ruby version you need
 
-      - name: Add faraday-retry gem to Gemfile
+      - name: Add global source and faraday-retry gem to Gemfile
         run: |
-          echo "gem 'faraday-retry'" >> Gemfile
+          echo 'source "https://rubygems.org"' >> Gemfile
+          echo 'gem "faraday-retry"' >> Gemfile
 
       - name: Install dependencies
         run: bundle install
